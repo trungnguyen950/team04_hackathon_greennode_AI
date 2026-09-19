@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSB AI Service Desk - Cổng Thông Tin & Trợ Lý IT Thông Minh</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --border: #e2e8f0;
+            --border-hover: #cbd5e1;
+            
+            --text-main: #0f172a;
+            --text-secondary: #334155;
+            --text-muted: #64748b;
+            --text-dim: #94a3b8;
+
+            --msb-red: #ef4444;
+            --msb-orange: #f97316;
+            --msb-gradient: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
+            
+            --primary: #1a73e8;
+            --primary-hover: #1557b0;
+            --primary-light: #eff6ff;
+
+            --terminal-bg: #0a0d14;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Container chuẩn */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header Navigation */
+        header.site-header {
+            position: sticky;
+            top: 0;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            z-index: 100;
+            transition: all 0.2s;
+        }
+
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            background: var(--msb-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+        }
+
+        .brand-text h1 {
+            font-size: 17px;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand-text p {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .tag-badge {
+            background-color: #fee2e2;
+            color: #b91c1c;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 600;
+            transition: color 0.15s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Button styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 9px 18px;
+            border-radius: 10px;
+            font-size: 13.5px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(26, 115, 232, 0.25);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(26, 115, 232, 0.35);
+        }
+
+        .btn-dark {
+            background-color: #0f172a;
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.2);
+        }
+
+        .btn-dark:hover {
+            background-color: #1e293b;
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background-color: #ffffff;
+            border-color: var(--border);
+            color: var(--text-secondary);
+        }
+
+        .btn-outline:hover {
+            background-color: #f8fafc;
+            border-color: var(--border-hover);
+            color: var(--text-main);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            padding: 60px 0 40px;
+            position: relative;
+        }
+
+        .hero-banner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #fff;
+            border: 1px solid var(--border);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #b91c1c;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+        }
+
+        .hero-title {
+            font-size: 42px;
+            font-weight: 800;
+            line-height: 1.25;
+            color: #0f172a;
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+        }
+
+        .hero-title span.highlight-gradient {
+            background: var(--msb-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-desc {
+            font-size: 17px;
+            color: var(--text-secondary);
+            max-width: 760px;
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        /* Email Box Callout */
+        .email-callout-card {
+            background: #ffffff;
+            border: 2px dashed #cbd5e1;
+            border-radius: 16px;
+            padding: 20px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            width: 100%;
+            max-width: 780px;
+            margin-bottom: 36px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            flex-wrap: wrap;
+        }
+
+        .email-callout-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            text-align: left;
+        }
+
+        .email-callout-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background-color: #eff6ff;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .email-target-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .email-target-address {
+            font-family: 'Fira Code', monospace;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .email-callout-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Two Experience Action Cards */
+        .experience-cards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .exp-card {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px 28px;
+            text-align: left;
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .exp-card:hover {
+            transform: translateY(-4px);
+            border-color: #93c5fd;
+            box-shadow: 0 12px 28px rgba(26, 115, 232, 0.12);
+        }
+
+        .exp-card.card-chat::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #1a73e8, #3b82f6);
+        }
+
+        .exp-card.card-console::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #10b981, #06b6d4);
+        }
+
+        .exp-card-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+
+        .exp-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .exp-card.card-chat .exp-icon {
+            background-color: #eff6ff;
+            color: #1a73e8;
+        }
+
+        .exp-card.card-console .exp-icon {
+            background-color: #ecfdf5;
+            color: #10b981;
+        }
+
+        .exp-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .exp-badge {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+
+        .exp-card.card-chat .exp-badge {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .exp-card.card-console .exp-badge {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .exp-desc {
+            font-size: 14.5px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .exp-features {
+            list-style: none;
+            margin-bottom: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .exp-features li {
+            font-size: 13px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .exp-features li span {
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        /* Stats Bar */
+        .stats-bar-section {
+            background-color: #ffffff;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 32px 0;
+            margin: 40px 0 60px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-size: 32px;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+
+        .stat-item p {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* Section Heading */
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 48px;
+        }
+
+        .section-tag {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary);
+            background: var(--primary-light);
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-size: 30px;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.5px;
+            margin-bottom: 12px;
+        }
+
+        .section-desc {
+            font-size: 15px;
+            color: var(--text-secondary);
+        }
+
+        /* Email Guide Steps */
+        .guide-steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .step-card {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 28px 24px;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+            transition: all 0.2s;
+        }
+
+        .step-card:hover {
+            border-color: #cbd5e1;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .step-number {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--msb-gradient);
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .step-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        .step-text {
+            font-size: 13.5px;
+            color: var(--text-secondary);
+            line-height: 1.55;
+        }
+
+        .step-code-box {
+            background-color: #f1f5f9;
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+            color: #1e293b;
+            margin-top: 12px;
+        }
+
+        /* Multi-turn callout banner */
+        .multiturn-banner {
+            background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%);
+            border: 1px solid #bfdbfe;
+            border-radius: 14px;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-top: 20px;
+        }
+
+        .multiturn-icon {
+            font-size: 32px;
+        }
+
+        .multiturn-content h4 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 4px;
+        }
+
+        .multiturn-content p {
+            font-size: 13.5px;
+            color: #334155;
+        }
+
+        /* Scenarios Section */
+        .scenarios-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .scenario-card {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 24px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .scenario-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .scenario-badge {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+
+        .badge-portal { background: #fee2e2; color: #dc2626; }
+        .badge-vpn { background: #e0e7ff; color: #4338ca; }
+        .badge-software { background: #fef3c7; color: #d97706; }
+        .badge-outlook { background: #e0f2fe; color: #0284c7; }
+
+        .scenario-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+
+        .scenario-subject {
+            font-size: 12.5px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .scenario-body-box {
+            background-color: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px 14px;
+            font-size: 13px;
+            color: #334155;
+            line-height: 1.5;
+            margin-bottom: 16px;
+            font-family: inherit;
+            white-space: pre-line;
+        }
+
+        .scenario-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* 8 Steps Timeline */
+        .pipeline-section {
+            padding: 60px 0;
+            background-color: #ffffff;
+            border-top: 1px solid var(--border);
+            margin-top: 60px;
+        }
+
+        .steps-flow-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .step-flow-item {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px 18px;
+            transition: all 0.2s;
+        }
+
+        .step-flow-item:hover {
+            border-color: var(--primary);
+            background: #ffffff;
+            box-shadow: 0 4px 14px rgba(26, 115, 232, 0.08);
+        }
+
+        .step-flow-num {
+            font-family: 'Fira Code', monospace;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .step-flow-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+
+        .step-flow-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.45;
+        }
+
+        /* Footer */
+        footer.site-footer {
+            background-color: #0f172a;
+            color: #94a3b8;
+            padding: 40px 0 30px;
+            border-top: 1px solid #1e293b;
+        }
+
+        .footer-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-brand h2 {
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .footer-brand p {
+            font-size: 12px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.15s;
+        }
+
+        .footer-links a:hover {
+            color: #ffffff;
+        }
+
+        /* Toast notification */
+        #toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background-color: #0f172a;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #toast.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 960px) {
+            .experience-cards-grid { grid-template-columns: 1fr; }
+            .guide-steps-grid { grid-template-columns: 1fr; }
+            .scenarios-grid { grid-template-columns: 1fr; }
+            .steps-flow-grid { grid-template-columns: repeat(2, 1fr); }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+            .hero-title { font-size: 32px; }
+            .nav-links { display: none; }
+        }
+
+        @media (max-width: 640px) {
+            .steps-flow-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .email-callout-card { flex-direction: column; align-items: flex-start; }
+            .email-callout-actions { width: 100%; }
+            .email-callout-actions .btn { flex: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation Bar -->
+    <header class="site-header">
+        <div class="container">
+            <div class="header-inner">
+                <a href="/" class="brand-logo">
+                    <div class="brand-icon">🤖</div>
+                    <div class="brand-text">
+                        <h1>
+                            MSB AI Service Desk
+                            <span class="tag-badge">Hackathon 2026</span>
+                        </h1>
+                        <p>Trợ Lý IT Thông Minh Tự Động Hóa Qua Email</p>
+                    </div>
+                </a>
+
+                <ul class="nav-links">
+                    <li><a href="#about">Giới thiệu</a></li>
+                    <li><a href="#guide">Hướng dẫn gửi mail</a></li>
+                    <li><a href="#scenarios">Kịch bản mẫu</a></li>
+                    <li><a href="#pipeline">Quy trình 8 bước</a></li>
+                </ul>
+
+                <div class="header-actions">
+                    <a href="/logs" class="btn btn-outline" title="Mở màn hình Live Console Terminal giám sát thời gian thực">
+                        🖥️ Live Console
+                    </a>
+                    <a href="/chat" class="btn btn-primary" title="Mở giao diện Web Chat Giả Lập gửi/nhận email tức thì">
+                        💬 Web Chat Giả Lập
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section" id="about">
+        <div class="container">
+            <div class="hero-banner">
+                <div class="hero-pill">
+                    <span>🚀</span> Đề Tài AI Hackathon 2026 • Tự Động Hóa IT Helpdesk Ngân Hàng MSB
+                </div>
+
+                <h2 class="hero-title">
+                    Hệ Thống Trợ Lý AI Service Desk<br>
+                    <span class="highlight-gradient">Tự Động Tiếp Nhận & Xử Lý Sự Cố 24/7</span>
+                </h2>
+
+                <p class="hero-desc">
+                    Giải pháp tích hợp Multi-Agent Workflow (LangGraph) và GreenNode: Tự động tiếp nhận email yêu cầu hỗ trợ, phân tích sự cố, tra cứu chuẩn SOP MSB, khởi tạo và cập nhật Ticket trên ServiceDesk Plus, và gửi giải pháp từng bước cho cán bộ ngân hàng chỉ trong 15-30 giây.
+                </p>
+
+                <!-- Hộp Email Tiếp Nhận Chính Thức -->
+                <div class="email-callout-card">
+                    <div class="email-callout-left">
+                        <div class="email-callout-icon">✉️</div>
+                        <div>
+                            <div class="email-target-label">Hòm thư tiếp nhận sự cố chính thức</div>
+                            <div class="email-target-address" id="targetEmailAddress">{{ target_email }}</div>
+                        </div>
+                    </div>
+                    <div class="email-callout-actions">
+                        <button onclick="copyEmailAddress()" class="btn btn-primary" title="Sao chép địa chỉ email vào bộ nhớ tạm">
+                            📋 Sao Chép Email
+                        </button>
+                        <a href="mailto:{{ target_email }}?subject=Yêu%20cầu%20hỗ%20trợ%20sự%20cố%20IT%20ServiceDesk&body=Mô%20tả%20chi%20tiết%20sự%20cố%20cần%20hỗ%20trợ:%0A-" class="btn btn-outline" title="Mở ứng dụng email để gửi thư">
+                            ↗️ Soạn Mail
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 2 Nút Trải Nghiệm Lớn -->
+                <div class="experience-cards-grid">
+                    <!-- Card 1: Web Chat Giả Lập -->
+                    <div class="exp-card card-chat">
+                        <div>
+                            <div class="exp-card-header">
+                                <div class="exp-icon">💬</div>
+                                <div>
+                                    <div class="exp-title">Web Chat Giả Lập Email</div>
+                                    <span class="exp-badge">Dành Cho Người Dùng Thử Nghiệm</span>
+                                </div>
+                            </div>
+                            <p class="exp-desc">
+                                Trải nghiệm ngay quy trình gửi và nhận email phản hồi của AI Service Desk dưới dạng giao diện chat trực quan mà không cần gửi thư thật qua Gmail.
+                            </p>
+                            <ul class="exp-features">
+                                <li><span>✓</span> Tài khoản gửi giả lập: <code>user@company.com</code></li>
+                                <li><span>✓</span> Phản hồi HTML chuẩn mẫu email phiếu kỹ thuật ServiceDesk</li>
+                                <li><span>✓</span> Hỗ trợ trao đổi đa lượt (Multi-turn reply) vào cùng mã phiếu</li>
+                            </ul>
+                        </div>
+                        <a href="/chat" class="btn btn-primary" style="width: 100%;">
+                            Trải Nghiệm Web Chat Ngay ➔
+                        </a>
+                    </div>
+
+                    <!-- Card 2: Live Console Log -->
+                    <div class="exp-card card-console">
+                        <div>
+                            <div class="exp-card-header">
+                                <div class="exp-icon">🖥️</div>
+                                <div>
+                                    <div class="exp-title">Live Terminal Console Log</div>
+                                    <span class="exp-badge">Dành Cho Ban Giám Khảo & Quản Trị Viên</span>
+                                </div>
+                            </div>
+                            <p class="exp-desc">
+                                Giám sát trực tiếp dòng log thời gian thực qua WebSocket, theo dõi chi tiết chu kỳ quét IMAP và 8 bước suy luận chuyên sâu của Multi-Agent.
+                            </p>
+                            <ul class="exp-features">
+                                <li><span>✓</span> Màn hình Console đen chuyên nghiệp, phân loại màu sắc</li>
+                                <li><span>✓</span> Nút quét thủ công ngay lập tức & điều khiển tiến trình Bot</li>
+                                <li><span>✓</span> Bộ lọc nhanh theo 8 Bước AI, Email Bot, ServiceDesk, Lỗi</li>
+                            </ul>
+                        </div>
+                        <a href="/logs" class="btn btn-dark" style="width: 100%;">
+                            Mở Live Console Log ➔
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <section class="stats-bar-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>&lt; 60s</h3>
+                    <p>Thời Gian Xử Lý & Phản Hồi</p>
+                </div>
+                <div class="stat-item">
+                    <h3>8 Bước</h3>
+                    <p>Quy Trình AI Chuyên Sâu</p>
+                </div>
+                <div class="stat-item">
+                    <h3>100% SOP</h3>
+                    <p>Chuẩn Hóa Tri Thức IT MSB</p>
+                </div>
+                <div class="stat-item">
+                    <h3 id="ticketCountDisplay">0</h3>
+                    <p>Phiếu Đã Xử Lý Trên SVD Plus</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hướng Dẫn Gửi Email Chi Tiết -->
+    <section class="container" style="padding: 40px 0 60px;" id="guide">
+        <div class="section-header">
+            <span class="section-tag">Hướng Dẫn Vận Hành</span>
+            <h3 class="section-title">Cách Gửi Email Nhận Hỗ Trợ Kỹ Thuật Tự Động</h3>
+            <p class="section-desc">
+                Cán bộ nhân viên chỉ cần gửi email mô tả sự cố tới hệ thống. AI Service Desk sẽ tự động phân tích và phản hồi ngay lập tức.
+            </p>
+        </div>
+
+        <div class="guide-steps-grid">
+            <!-- Bước 1 -->
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <h4 class="step-title">Soạn Email Nêu Rõ Sự Cố</h4>
+                <p class="step-text">
+                    Ghi rõ vấn đề gặp phải ở phần Tiêu đề và mô tả chi tiết triệu chứng, phần mềm hoặc mã lỗi ở phần Nội dung.
+                </p>
+                <div class="step-code-box">
+                    <strong>Tới:</strong> {{ target_email }}<br>
+                    <strong>Tiêu đề:</strong> [Sự cố] Quên mật khẩu portal...
+                </div>
+            </div>
+
+            <!-- Bước 2 -->
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <h4 class="step-title">AI Tự Động Phân Tích & Tạo Ticket</h4>
+                <p class="step-text">
+                    Hệ thống tự động khởi tạo Ticket trên <strong>ManageEngine ServiceDesk Plus</strong> với mã định danh <code>#SVD-xxxxx</code> và tra cứu kho tri thức SOP nội bộ MSB.
+                </p>
+                <div class="step-code-box">
+                    <strong>Trạng thái:</strong> Open ➔ In Progress<br>
+                    <strong>Mã phiếu:</strong> #SVD-10xxx
+                </div>
+            </div>
+
+            <!-- Bước 3 -->
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <h4 class="step-title">Nhận Email Hướng Dẫn Từng Bước</h4>
+                <p class="step-text">
+                    Hộp thư của bạn sẽ nhận được email phản hồi HTML đẹp mắt chứa mã số phiếu, kỹ thuật viên phụ trách, hướng dẫn khắc phục cụ thể và đường link tra cứu.
+                </p>
+                <div class="step-code-box">
+                    <strong>Định dạng:</strong> HTML Card chính thức<br>
+                    <strong>Nội dung:</strong> Hướng dẫn chi tiết SOP
+                </div>
+            </div>
+        </div>
+
+        <!-- Multi-turn Banner -->
+        <div class="multiturn-banner">
+            <div class="multiturn-icon">↩️</div>
+            <div class="multiturn-content">
+                <h4>Hỗ Trợ Tương Tác Đa Lượt (Multi-Turn Conversational Email)</h4>
+                <p>
+                    Nếu làm theo hướng dẫn mà sự cố vẫn chưa được khắc phục, bạn chỉ cần bấm nút <strong>Reply (Trả lời)</strong> trực tiếp vào email đó (giữ nguyên tiêu đề chứa <code>Re: [#SVD-xxxxx]</code>). AI Service Desk sẽ nhận diện ngữ cảnh và tiếp tục hướng dẫn chuyên sâu hơn hoặc điều phối kỹ thuật viên can thiệp!
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bộ Kịch Bản Mẫu Thực Tế -->
+    <section class="container" style="padding: 20px 0 60px;" id="scenarios">
+        <div class="section-header">
+            <span class="section-tag">Kịch Bản Phổ Biến</span>
+            <h3 class="section-title">Các Trường Hợp Hỗ Trợ Điển Hình</h3>
+            <p class="section-desc">
+                Bạn có thể bấm "Thử trên Web Chat" để tự động đưa kịch bản vào khung chat hoặc sao chép để gửi email thật.
+            </p>
+        </div>
+
+        <div class="scenarios-grid">
+            <!-- Kịch bản 1 -->
+            <div class="scenario-card">
+                <div>
+                    <div class="scenario-header">
+                        <div>
+                            <div class="scenario-title">1. Mở Khóa & Đặt Lại Mật Khẩu Portal</div>
+                            <div class="scenario-subject">Tiêu đề: Yêu cầu cấp lại mật khẩu tài khoản Portal MSB</div>
+                        </div>
+                        <span class="scenario-badge badge-portal">Tài Khoản & Mật Khẩu</span>
+                    </div>
+                    <div class="scenario-body-box" id="scenario-1">Chào IT ServiceDesk,
+Tài khoản portal của tôi (user@company.com) bị khóa do nhập sai mật khẩu quá 5 lần sáng nay. Tôi cần cấp lại mật khẩu gấp để xử lý chứng từ cho khách hàng. Xin cảm ơn.</div>
+                </div>
+                <div class="scenario-actions">
+                    <a href="/chat?reset=1&prompt=Tài%20khoản%20portal%20của%20tôi%20bị%20khóa%20do%20nhập%20sai%20mật%20khẩu%20quá%205%20lần%20sáng%20nay.%20Tôi%20cần%20cấp%20lại%20mật%20khẩu%20gấp%20để%20xử%20lý%20chứng%20từ." class="btn btn-primary" style="flex: 1;">
+                        💬 Thử Trên Web Chat
+                    </a>
+                    <button onclick="copyScenarioText('scenario-1')" class="btn btn-outline" title="Sao chép nội dung kịch bản">
+                        📋 Copy
+                    </button>
+                </div>
+            </div>
+
+            <!-- Kịch bản 2 -->
+            <div class="scenario-card">
+                <div>
+                    <div class="scenario-header">
+                        <div>
+                            <div class="scenario-title">2. Sự Cố Không Truy Cập Được Mạng</div>
+                            <div class="scenario-subject">Tiêu đề: Lỗi không vào được mạng</div>
+                        </div>
+                        <span class="scenario-badge badge-vpn">Mạng & Kết Nối</span>
+                    </div>
+                    <div class="scenario-body-box" id="scenario-2">Chào IT ServiceDesk,
+Sáng nay tôi mở máy nhưng không có mạng. Nhờ IT hỗ trợ kiểm tra cấu hình giúp tôi.
+Xin cảm ơn.</div>
+                </div>
+                <div class="scenario-actions">
+                    <a href="/chat?reset=1&prompt=Sáng%20nay%20tôi%20mở%20máy%20nhưng%20không%20có%20mạng.%20Nhờ%20IT%20hỗ%20trợ%20kiểm%20tra%20cấu%20hình%20giúp%20tôi.%20Xin%20cảm%20ơn." class="btn btn-primary" style="flex: 1;">
+                        💬 Thử Trên Web Chat
+                    </a>
+                    <button onclick="copyScenarioText('scenario-2')" class="btn btn-outline" title="Sao chép nội dung kịch bản">
+                        📋 Copy
+                    </button>
+                </div>
+            </div>
+
+            <!-- Kịch bản 3 -->
+            <div class="scenario-card">
+                <div>
+                    <div class="scenario-header">
+                        <div>
+                            <div class="scenario-title">3. Yêu Cầu Cài Đặt Phần Mềm Văn Phòng</div>
+                            <div class="scenario-subject">Tiêu đề: Yêu cầu cài đặt phần mềm in ấn</div>
+                        </div>
+                        <span class="scenario-badge badge-software">Phần Mềm</span>
+                    </div>
+                    <div class="scenario-body-box" id="scenario-3">Chào IT,
+Em mới chuyển sang phòng ban cần kết nối máy in của văn phòng để in ấn chứng từ. Xin cảm ơn.</div>
+                </div>
+                <div class="scenario-actions">
+                    <a href="/chat?reset=1&prompt=Em%20mới%20chuyển%20sang%20phòng%20ban%20cần%20kết%20nối%20máy%20in%20của%20văn%20phòng%20để%20in%20ấn%20chứng%20từ.%20Xin%20cảm%20ơn." class="btn btn-primary" style="flex: 1;">
+                        💬 Thử Trên Web Chat
+                    </a>
+                    <button onclick="copyScenarioText('scenario-3')" class="btn btn-outline" title="Sao chép nội dung kịch bản">
+                        📋 Copy
+                    </button>
+                </div>
+            </div>
+
+            <!-- Kịch bản 4 -->
+            <div class="scenario-card">
+                <div>
+                    <div class="scenario-header">
+                        <div>
+                            <div class="scenario-title">4. Yêu Cầu Cài Đặt Phần Mềm Office 365 Copilot</div>
+                            <div class="scenario-subject">Tiêu đề: Yêu Cầu Cài Đặt Phần Mềm Office 365 Copilot</div>
+                        </div>
+                        <span class="scenario-badge badge-outlook">Phần Mềm</span>
+                    </div>
+                    <div class="scenario-body-box" id="scenario-4">Chào IT,
+Tôi cần cài đặt Microsoft Office 365 có tính năng AI Copilot để phục vụ soạn thảo đề án. Xin cảm ơn.</div>
+
+                </div>
+                <div class="scenario-actions">
+                    <a href="/chat?reset=1&prompt=Tôi%20cần%20cài%20đặt%20Microsoft%20Office%20365%20có%20tính%20năng%20AI%20Copilot%20để%20phục%20vụ%20soạn%20thảo%20đề%20án.Xin%20cảm%20ơn." class="btn btn-primary" style="flex: 1;">
+                        💬 Thử Trên Web Chat
+                    </a>
+                    <button onclick="copyScenarioText('scenario-4')" class="btn btn-outline" title="Sao chép nội dung kịch bản">
+                        📋 Copy
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quy Trình 8 Bước AI Section -->
+    <section class="pipeline-section" id="pipeline">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Kiến Trúc Đột Phá</span>
+                <h3 class="section-title">Quy Trình Xử Lý 8 Bước Của Multi-Agent AI</h3>
+                <p class="section-desc">
+                    Từng email nhận được sẽ trải qua chuỗi suy luận logic khép kín, tương tác thời gian thực với ServiceDesk Plus API và kho SOP.
+                </p>
+            </div>
+
+            <div class="steps-flow-grid">
+                <div class="step-flow-item">
+                    <div class="step-flow-num">Bước 01 • User Request</div>
+                    <div class="step-flow-title">1. User Request</div>
+                    <div class="step-flow-desc">Tiếp nhận yêu cầu bằng ngôn ngữ tự nhiên từ email hoặc web chat.</div>
+                </div>
+
+                <div class="step-flow-item">
+                    <div class="step-flow-num">Bước 02 • Intent</div>
+                    <div class="step-flow-title">2. Intent</div>
+                    <div class="step-flow-desc">Xác định loại vấn đề và ý định yêu cầu của người dùng.</div>
+                </div>
+
+                <div class="step-flow-item">
+                    <div class="step-flow-num">Bước 03 • Context</div>
+                    <div class="step-flow-title">3. Context</div>
+                    <div class="step-flow-desc">Thu thập thông tin cần thiết (triệu chứng, môi trường, thiết bị, phần mềm liên quan).</div>
+                </div>
+
+                <div class="step-flow-item">
+                    <div class="step-flow-num">Bước 04 • Knowledge</div>
+                    <div class="step-flow-title">4. Knowledge</div>
+                    <div class="step-flow-desc">Tìm kiếm KB/SOP/Ticket tương tự trong kho tri thức nội bộ ngân hàng MSB.</div>
+                </div>
+
+                <div class="step-flow-item">
+                    <div class="step-flow-num">Bước 05 • Diagnostic</div>
+                    <div class="step-flow-title">5. Diagnostic</div>
+                    <div class="step-flow-desc">Phân tích triệu chứng và nguyên nhân có khả năng gây ra sự cố.</div>
+                </div>
+
+                <div class="step-flow-item">
+                    <div class="step-flow-num">Bước 06 • Recommendation</div>
+                    <div class="step-flow-title">6. Recommendation</div>
+                    <div class="step-flow-desc">Đưa ra hướng xử lý chi tiết từng bước cho người dùng hoặc kỹ thuật viên.</div>
+                </div>
+
+                <div class="step-flow-item">
+                    <div class="step-flow-num">Bước 07 • Ticket</div>
+                    <div class="step-flow-title">7. Ticket</div>
+                    <div class="step-flow-desc">Tạo/Update Ticket nếu cần IT hỗ trợ trên hệ thống ManageEngine ServiceDesk Plus.</div>
+                </div>
+
+                <div class="step-flow-item">
+                    <div class="step-flow-num">Bước 08 • Resolution</div>
+                    <div class="step-flow-title">8. Resolution</div>
+                    <div class="step-flow-desc">Lưu kết quả xử lý và phục vụ Knowledge, hoàn tất phản hồi cho người dùng.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <h2>MSB AI Service Desk • AI Hackathon 2026</h2>
+                    <p>Hệ thống tự động hóa Helpdesk thông minh tích hợp Generative AI & ManageEngine ServiceDesk Plus</p>
+                </div>
+                <ul class="footer-links">
+                    <li><a href="/">Trang Chủ</a></li>
+                    <li><a href="/chat">Web Chat Giả Lập</a></li>
+                    <li><a href="/logs">Live Console Log</a></li>
+                    <li><a href="https://49.213.71.61:8089" target="_blank" rel="noopener">Cổng ServiceDesk Plus ↗</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification Popup -->
+    <div id="toast">
+        <span id="toastIcon">📋</span>
+        <span id="toastMessage">Đã sao chép vào bộ nhớ tạm!</span>
+    </div>
+
+    <script>
+        // Hiển thị thông báo Toast
+        function showToast(msg, icon = '📋') {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toastMessage');
+            const iconEl = document.getElementById('toastIcon');
+            msgEl.innerText = msg;
+            iconEl.innerText = icon;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2500);
+        }
+
+        // Sao chép địa chỉ email
+        function copyEmailAddress() {
+            const email = document.getElementById('targetEmailAddress').innerText.trim();
+            navigator.clipboard.writeText(email).then(() => {
+                showToast(`Đã sao chép email: ${email}`, '✅');
+            }).catch(() => {
+                showToast(`Email: ${email}`, '✉️');
+            });
+        }
+
+        // Sao chép nội dung kịch bản
+        function copyScenarioText(elementId) {
+            const text = document.getElementById(elementId).innerText.trim();
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Đã sao chép nội dung kịch bản vào clipboard!', '✅');
+            }).catch(() => {
+                showToast('Lỗi khi sao chép.', '❌');
+            });
+        }
+
+        // Cập nhật số lượng Ticket từ server
+        async function fetchSystemStats() {
+            try {
+                const res = await fetch('/api/status');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.ticket_count !== undefined) {
+                        document.getElementById('ticketCountDisplay').innerText = data.ticket_count;
+                    }
+                }
+            } catch (e) {
+                console.log("Stats fetch error:", e);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchSystemStats();
+        });
+    </script>
+</body>
+</html>
+

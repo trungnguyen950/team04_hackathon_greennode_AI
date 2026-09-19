@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Service Desk - Terminal Console Monitor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #0a0d14;
+            --bg-card: #0f141f;
+            --bg-terminal: #07090e;
+            --border-color: #1a2233;
+            --text-main: #e2e8f0;
+            --text-muted: #64748b;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --purple: #a855f7;
+            --cyan: #06b6d4;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Header Bar */
+        header {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            font-size: 22px;
+        }
+
+        h1 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.3px;
+        }
+
+        .sub-title {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .header-badges {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            background-color: #141b2a;
+            border: 1px solid var(--border-color);
+            color: #cbd5e1;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #64748b;
+        }
+
+        .status-dot.online {
+            background-color: var(--success);
+            box-shadow: 0 0 8px var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.offline {
+            background-color: var(--danger);
+            box-shadow: 0 0 8px var(--danger);
+        }
+
+        .status-dot.running {
+            background-color: var(--cyan);
+            box-shadow: 0 0 8px var(--cyan);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Control Toolbar */
+        .toolbar {
+            background-color: #0b0f19;
+            border-bottom: 1px solid var(--border-color);
+            padding: 8px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .filter-btn {
+            background-color: #141b2a;
+            border: 1px solid #1e293b;
+            color: #94a3b8;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .filter-btn:hover {
+            background-color: #1e293b;
+            color: #ffffff;
+        }
+
+        .filter-btn.active {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 280px;
+        }
+
+        .search-box input {
+            width: 100%;
+            background-color: #111827;
+            border: 1px solid #1f2937;
+            color: #ffffff;
+            padding: 5px 10px 5px 30px;
+            border-radius: 5px;
+            font-size: 12px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 9px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .action-group {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 12px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.15s;
+        }
+
+        .btn-primary { background-color: var(--primary); color: #fff; }
+        .btn-primary:hover { background-color: var(--primary-hover); }
+
+        .btn-success { background-color: #059669; color: #fff; }
+        .btn-success:hover { background-color: #047857; }
+
+        .btn-danger { background-color: #dc2626; color: #fff; }
+        .btn-danger:hover { background-color: #b91c1c; }
+
+        .btn-secondary { background-color: #141b2a; border: 1px solid #1e293b; color: #cbd5e1; }
+        .btn-secondary:hover { background-color: #1e293b; color: #fff; }
+
+        /* Terminal Window */
+        .terminal-header {
+            background-color: #0d121c;
+            border-bottom: 1px solid #151c2a;
+            padding: 6px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: 'Fira Code', Consolas, monospace;
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        .terminal-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .t-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .dot-red { background: #ef4444; }
+        .dot-yellow { background: #f59e0b; }
+        .dot-green { background: #10b981; }
+
+        .terminal-container {
+            flex: 1;
+            background-color: var(--bg-terminal);
+            padding: 14px 18px;
+            overflow-y: auto;
+            font-family: 'Fira Code', 'Consolas', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-break: break-word;
+            position: relative;
+        }
+
+        /* Log Line Layout */
+        .log-row {
+            display: block;
+            width: 100%;
+            min-height: 19px;
+        }
+
+        .log-row.log-spacer {
+            height: 12px;
+            min-height: 12px;
+        }
+
+        .log-row:hover {
+            background-color: rgba(255, 255, 255, 0.03);
+        }
+
+        .log-time {
+            color: #334155;
+            user-select: none;
+            font-size: 11px;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        /* Color Syntax matching real terminal output */
+        .text-divider { color: #475569; font-weight: normal; }
+        .text-step { color: #c084fc; font-weight: 600; }
+        .text-email { color: #38bdf8; font-weight: 500; }
+        .text-svd { color: #2dd4bf; font-weight: 500; }
+        .text-success { color: #34d399; font-weight: 600; }
+        .text-warning { color: #fbbf24; font-weight: 500; }
+        .text-error { color: #f87171; font-weight: 600; }
+        .text-info { color: #cbd5e1; }
+
+        /* Empty state */
+        .empty-logs {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 80%;
+            color: #475569;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .empty-logs-icon {
+            font-size: 40px;
+            margin-bottom: 8px;
+        }
+
+        /* Scrollbar */
+        .terminal-container::-webkit-scrollbar {
+            width: 7px;
+        }
+        .terminal-container::-webkit-scrollbar-track {
+            background: var(--bg-terminal);
+        }
+        .terminal-container::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        .terminal-container::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+
+        /* Floating auto-scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 20px;
+            right: 24px;
+            background: rgba(30, 41, 59, 0.95);
+            border: 1px solid #334155;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            color: #cbd5e1;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            display: none;
+            backdrop-filter: blur(4px);
+        }
+
+        .scroll-indicator:hover {
+            background: #334155;
+            color: #fff;
+        }
+
+        /* Toast popup */
+        #toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #1e293b;
+            border: 1px solid #3b82f6;
+            color: #ffffff;
+            padding: 7px 16px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+            display: none;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="header-title">
+            <span class="logo-icon">🤖</span>
+            <div>
+                <h1>AI Service Desk Live Console</h1>
+                <div class="sub-title">Màn hình giám sát tiến trình quét email & quy trình AI 8 bước ServiceDesk Plus</div>
+            </div>
+        </div>
+
+        <div class="header-badges">
+            <div class="status-badge" id="ws-badge">
+                <div class="status-dot offline" id="ws-dot"></div>
+                <span id="ws-status">Đang kết nối...</span>
+            </div>
+
+            <div class="status-badge" id="bot-badge">
+                <div class="status-dot" id="bot-dot"></div>
+                <span id="bot-status">Bot: Đang tải...</span>
+            </div>
+
+            <div class="status-badge">
+                <span>🎫 Tickets: <strong id="ticket-count" style="color: #60a5fa;">0</strong></span>
+            </div>
+
+            <a href="/" class="btn btn-secondary" style="text-decoration: none; padding: 5px 12px; font-size: 12px; border-radius: 20px;" title="Về trang chủ giới thiệu & hướng dẫn">
+                🏠 Trang Chủ
+            </a>
+
+            <a href="/chat" target="_blank" class="btn btn-primary" style="text-decoration: none; padding: 5px 12px; font-size: 12px; border-radius: 20px;" title="Mở giao diện Web Chat Giả Lập gửi/nhận email msbservicedesk2026">
+                💬 Web Chat Giả Lập Email
+            </a>
+        </div>
+    </header>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+        <!-- Bộ lọc danh mục -->
+        <div class="filter-group">
+            <button class="filter-btn active" data-cat="all">Tất cả</button>
+            <button class="filter-btn" data-cat="step">🔹 8 Bước AI</button>
+            <button class="filter-btn" data-cat="email">📩 Email Bot</button>
+            <button class="filter-btn" data-cat="svd">🌐 ServiceDesk</button>
+            <button class="filter-btn" data-cat="success">✅ Thành công</button>
+            <button class="filter-btn" data-cat="error">❌ Lỗi</button>
+        </div>
+
+        <!-- Ô tìm kiếm từ khóa -->
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search-input" placeholder="Tìm kiếm nhanh (ID ticket, email, lỗi)...">
+        </div>
+
+        <!-- Các nút thao tác -->
+        <div class="action-group">
+            <button class="btn btn-primary" id="btn-trigger" title="Quét hộp thư ngay bây giờ">
+                🔄 Quét Ngay
+            </button>
+            <button class="btn btn-danger" id="btn-toggle-bot">
+                ⏹️ Dừng Bot
+            </button>
+            <button class="btn btn-secondary" id="btn-time-toggle" title="Ẩn/Hiện cột mốc thời gian">
+                🕒 Giờ: ẨN
+            </button>
+            <button class="btn btn-secondary" id="btn-autoscroll" title="Bật/Tắt tự động cuộn xuống dòng mới">
+                ⬇️ Tự cuộn: BẬT
+            </button>
+            <button class="btn btn-secondary" id="btn-clear" title="Xóa trắng màn hình">
+                🗑️ Xóa
+            </button>
+            <a href="/api/logs/download" class="btn btn-secondary" style="text-decoration: none;" title="Tải toàn bộ file log app.log">
+                📥 Tải Log
+            </a>
+        </div>
+    </div>
+
+    <!-- Terminal Header Bar (như console thật) -->
+    <div class="terminal-header">
+        <div class="terminal-dots">
+            <span class="t-dot dot-red"></span>
+            <span class="t-dot dot-yellow"></span>
+            <span class="t-dot dot-green"></span>
+        </div>
+        <div>bash - python main_email_bot.py (Live Output)</div>
+        <div id="log-count-text">0 dòng log</div>
+    </div>
+
+    <!-- Màn hình Terminal Console -->
+    <div class="terminal-container" id="terminal">
+        <div class="empty-logs" id="empty-state">
+            <div class="empty-logs-icon">📡</div>
+            <p>Đang tải dòng lệnh từ máy chủ...</p>
+        </div>
+    </div>
+
+    <!-- Chỉ báo cuộn xuống khi đang đọc log cũ -->
+    <div class="scroll-indicator" id="scroll-btn" onclick="scrollToBottom(true)">
+        ⬇️ Cuộn xuống dòng mới nhất
+    </div>
+
+    <!-- Toast Popup -->
+    <div id="toast"></div>
+
+    <script>
+        let autoScroll = true;
+        let showTimestamps = false;
+        let currentFilter = 'all';
+        let searchQuery = '';
+        let allLogs = [];
+        let ws = null;
+        let botRunning = true;
+
+        const terminal = document.getElementById('terminal');
+        const emptyState = document.getElementById('empty-state');
+        const scrollBtn = document.getElementById('scroll-btn');
+        const searchInput = document.getElementById('search-input');
+        const btnAutoScroll = document.getElementById('btn-autoscroll');
+        const btnTimeToggle = document.getElementById('btn-time-toggle');
+        const btnClear = document.getElementById('btn-clear');
+        const btnTrigger = document.getElementById('btn-trigger');
+        const btnToggleBot = document.getElementById('btn-toggle-bot');
+        const wsStatus = document.getElementById('ws-status');
+        const wsDot = document.getElementById('ws-dot');
+        const botStatus = document.getElementById('bot-status');
+        const botDot = document.getElementById('bot-dot');
+        const ticketCount = document.getElementById('ticket-count');
+        const logCountText = document.getElementById('log-count-text');
+
+        function showToast(msg, duration = 3000) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, duration);
+        }
+
+        function updateLogCount() {
+            logCountText.innerText = `${allLogs.length} dòng log`;
+        }
+
+        // Tạo 1 dòng log theo đúng giao diện Console thật
+        function createLogRow(entry) {
+            const row = document.createElement('div');
+            row.className = `log-row cat-${entry.category}`;
+            row.dataset.category = entry.category;
+
+            // Khử sạch mã màu ANSI thô (ví dụ [32m, [0m, [36m...) nếu có
+            const cleanText = (entry.message || '').replace(/\x1b\[[0-9;]*[a-zA-Z]|\[[0-9]{1,3}(?:;[0-9]{1,3})*m/g, '');
+            row.dataset.message = cleanText.toLowerCase();
+
+            // Dòng trống -> tạo khoảng cách dòng y hệt console
+            if (entry.category === 'blank' || !cleanText || cleanText.trim() === '') {
+                row.className += ' log-spacer';
+                row.innerHTML = '&nbsp;';
+                applyFilterToRow(row);
+                return row;
+            }
+
+            // Hiển thị giờ nếu được bật
+            if (showTimestamps) {
+                const timeSpan = document.createElement('span');
+                timeSpan.className = 'log-time';
+                timeSpan.innerText = `[${entry.timestamp}] `;
+                row.appendChild(timeSpan);
+            }
+
+            // Nội dung dòng text
+            const textSpan = document.createElement('span');
+            textSpan.className = `log-text text-${entry.category}`;
+            textSpan.textContent = cleanText;
+            row.appendChild(textSpan);
+
+            applyFilterToRow(row);
+            return row;
+        }
+
+        function applyFilterToRow(row) {
+            const cat = row.dataset.category;
+            const text = row.dataset.message;
+
+            // Luôn hiển thị divider và spacer khi xem Tất cả
+            if (currentFilter === 'all') {
+                if (!searchQuery || text.includes(searchQuery)) {
+                    row.style.display = 'block';
+                } else {
+                    row.style.display = 'none';
+                }
+                return;
+            }
+
+            // Khi lọc theo danh mục cụ thể
+            let matchesCat = (cat === currentFilter);
+            let matchesSearch = (!searchQuery) || text.includes(searchQuery);
+
+            if (matchesCat && matchesSearch) {
+                row.style.display = 'block';
+            } else {
+                row.style.display = 'none';
+            }
+        }
+
+        function scrollToBottom(force = false) {
+            if (autoScroll || force) {
+                terminal.scrollTop = terminal.scrollHeight;
+                scrollBtn.style.display = 'none';
+            }
+        }
+
+        terminal.addEventListener('scroll', () => {
+            const atBottom = terminal.scrollHeight - terminal.scrollTop - terminal.clientHeight < 40;
+            if (!atBottom && autoScroll) {
+                scrollBtn.style.display = 'block';
+            } else if (atBottom) {
+                scrollBtn.style.display = 'none';
+            }
+        });
+
+        btnAutoScroll.addEventListener('click', () => {
+            autoScroll = !autoScroll;
+            btnAutoScroll.innerText = autoScroll ? '⬇️ Tự cuộn: BẬT' : '⏸️ Tự cuộn: TẮT';
+            btnAutoScroll.classList.toggle('btn-primary', autoScroll);
+            btnAutoScroll.classList.toggle('btn-secondary', !autoScroll);
+            if (autoScroll) scrollToBottom(true);
+        });
+
+        // Bật/tắt hiển thị mốc thời gian
+        btnTimeToggle.addEventListener('click', () => {
+            showTimestamps = !showTimestamps;
+            btnTimeToggle.innerText = showTimestamps ? '🕒 Giờ: HIỆN' : '🕒 Giờ: ẨN';
+            btnTimeToggle.classList.toggle('btn-primary', showTimestamps);
+            btnTimeToggle.classList.toggle('btn-secondary', !showTimestamps);
+            
+            // Re-render
+            terminal.innerHTML = '';
+            allLogs.forEach(entry => {
+                terminal.appendChild(createLogRow(entry));
+            });
+            scrollToBottom();
+        });
+
+        btnClear.addEventListener('click', async () => {
+            if (confirm('Bạn có chắc chắn muốn xóa toàn bộ log trên màn hình và file app.log?')) {
+                try {
+                    await fetch('/api/logs/clear', { method: 'POST' });
+                    terminal.innerHTML = '';
+                    allLogs = [];
+                    updateLogCount();
+                    showToast('Đã xóa sạch lịch sử log.');
+                } catch (e) {
+                    showToast('Lỗi khi xóa log: ' + e);
+                }
+            }
+        });
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.cat;
+                refilterAll();
+            });
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value.toLowerCase().trim();
+            refilterAll();
+        });
+
+        function refilterAll() {
+            const rows = terminal.querySelectorAll('.log-row');
+            rows.forEach(applyFilterToRow);
+            scrollToBottom();
+        }
+
+        // Kết nối WebSocket
+        function connectWebSocket() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUrl = `${protocol}//${window.location.host}/ws/logs`;
+
+            ws = new WebSocket(wsUrl);
+
+            ws.onopen = () => {
+                wsStatus.innerText = 'Trực tiếp (Live)';
+                wsDot.className = 'status-dot online';
+                console.log('WebSocket connected!');
+            };
+
+            ws.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    if (data.type === 'log') {
+                        if (emptyState) emptyState.style.display = 'none';
+                        const row = createLogRow(data.entry);
+                        terminal.appendChild(row);
+                        allLogs.push(data.entry);
+                        updateLogCount();
+                        scrollToBottom();
+                    } else if (data.type === 'status_update') {
+                        updateStatus(data.status);
+                    }
+                } catch (err) {
+                    console.error('Lỗi phân tích WebSocket message:', err);
+                }
+            };
+
+            ws.onclose = () => {
+                wsStatus.innerText = 'Mất kết nối (Đang thử lại...)';
+                wsDot.className = 'status-dot offline';
+                setTimeout(connectWebSocket, 3000);
+            };
+
+            ws.onerror = (err) => {
+                console.error('Lỗi WebSocket:', err);
+                ws.close();
+            };
+        }
+
+        async function loadInitialLogs() {
+            try {
+                const res = await fetch('/api/logs?limit=400');
+                const logs = await res.json();
+                if (logs && logs.length > 0) {
+                    if (emptyState) emptyState.style.display = 'none';
+                    logs.forEach(entry => {
+                        const row = createLogRow(entry);
+                        terminal.appendChild(row);
+                        allLogs.push(entry);
+                    });
+                    updateLogCount();
+                    scrollToBottom(true);
+                } else {
+                    if (emptyState) emptyState.innerHTML = '<p>Đang chuẩn bị phiên làm việc...</p>';
+                }
+            } catch (err) {
+                console.error('Lỗi nạp log ban đầu:', err);
+            }
+        }
+
+        function updateStatus(status) {
+            if (!status) return;
+            if (status.ticket_count !== undefined) {
+                ticketCount.innerText = status.ticket_count;
+            }
+            if (status.bot_running !== undefined) {
+                botRunning = status.bot_running;
+                if (botRunning) {
+                    botStatus.innerText = 'Bot: Đang chạy';
+                    botDot.className = 'status-dot running';
+                    btnToggleBot.innerText = '⏹️ Dừng Bot';
+                    btnToggleBot.className = 'btn btn-danger';
+                } else {
+                    botStatus.innerText = 'Bot: Đang tắt';
+                    botDot.className = 'status-dot';
+                    btnToggleBot.innerText = '▶️ Bật Bot Tự Động';
+                    btnToggleBot.className = 'btn btn-success';
+                }
+            }
+        }
+
+        async function fetchSystemStatus() {
+            try {
+                const res = await fetch('/api/status');
+                const status = await res.json();
+                updateStatus(status);
+            } catch (err) {
+                console.error('Lỗi fetch status:', err);
+            }
+        }
+
+        btnTrigger.addEventListener('click', async () => {
+            btnTrigger.disabled = true;
+            btnTrigger.innerText = '⏳ Đang quét...';
+            showToast('Đang kích hoạt quét hộp thư...');
+            try {
+                const res = await fetch('/api/bot/trigger', { method: 'POST' });
+                const data = await res.json();
+                showToast(data.message || 'Quét thư hoàn tất!');
+            } catch (err) {
+                showToast('Lỗi khi quét: ' + err);
+            } finally {
+                btnTrigger.disabled = false;
+                btnTrigger.innerText = '🔄 Quét Ngay';
+                fetchSystemStatus();
+            }
+        });
+
+        btnToggleBot.addEventListener('click', async () => {
+            btnToggleBot.disabled = true;
+            const endpoint = botRunning ? '/api/bot/stop' : '/api/bot/start';
+            showToast(botRunning ? 'Đang dừng Email Bot...' : 'Đang bật Email Bot tự động...');
+            try {
+                const res = await fetch(endpoint, { method: 'POST' });
+                const data = await res.json();
+                showToast(data.message);
+                fetchSystemStatus();
+            } catch (err) {
+                showToast('Lỗi thay đổi trạng thái Bot: ' + err);
+            } finally {
+                btnToggleBot.disabled = false;
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadInitialLogs();
+            connectWebSocket();
+            fetchSystemStatus();
+        });
+    </script>
+</body>
+</html>
