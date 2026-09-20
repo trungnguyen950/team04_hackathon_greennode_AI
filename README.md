@@ -355,6 +355,20 @@ Please ensure no secrets or proprietary KB data are included in your PR.
 
 ---
 
+## 👥 Contributors
+
+| Name | Role | Email |
+|---|---|---|
+| **Dang Thanh Tung** | 🔧 Main Developer · 🧪 Main Tester | `tungdtt16@msb.com.vn` |
+| Le Xuan Hoa | 📋 Product Owner | `hoalx1@msb.com.vn` |
+| Nguyen Quang Trung | 💻 Dev · 🏗️ Infrastructure · ✏️ Editor | `trungnq20@msb.com.vn` |
+| Nguyen Truong Giang | 📊 Data Training · 🎯 Scenario Preparing | — |
+| Nguyen Minh Tuan | 💡 Contributor (Idea) | — |
+
+> Built with ❤️ by the MSB Bank AI Hackathon 2026 team.
+
+---
+
 ## 📄 License
 
 [MIT](LICENSE) — © 2026 AI Service Desk Assistant Contributors.
