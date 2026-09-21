@@ -359,11 +359,11 @@ Please ensure no secrets or proprietary KB data are included in your PR.
 
 | Name | Role | Email |
 |---|---|---|
+| **Le Xuan Hoa** | 📋 Product Owner | `hoalx1@msb.com.vn` |
 | **Dang Thanh Tung** | 🔧 Main Developer · 🧪 Main Tester | `tungdtt16@msb.com.vn` |
-| Le Xuan Hoa | 📋 Product Owner | `hoalx1@msb.com.vn` |
-| Nguyen Quang Trung | 💻 Dev · 🏗️ Infrastructure · ✏️ Editor | `trungnq20@msb.com.vn` |
-| Nguyen Truong Giang | 📊 Data Training · 🎯 Scenario Preparing | — |
-| Nguyen Minh Tuan | 💡 Contributor (Idea) | — |
+| Nguyen Quang Trung | 💻 Dev · 🏗️ Infrastructure · ✏️ Editor & Presenter | `trungnq20@msb.com.vn` |
+| Nguyen Truong Giang | 📊 Data Training · 🎯 Scenario Preparing | `giangnt26@msb.com.vn` | 
+| Nguyen Duc Tuan | 💡 Contributor (Idea) | `tuannd16@msb.com.vn` |
 
 > Built with ❤️ by the MSB Bank AI Hackathon 2026 team.
 
