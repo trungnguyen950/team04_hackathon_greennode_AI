@@ -6,6 +6,15 @@ Built for **AI Hackathon 2026** (MSB Bank, Vietnam). Released under the [MIT Lic
 
 ---
 
+## 🌐 Live Demo & Access
+
+- **🚀 Live Web Application:** [https://endpoint-c57756dd-5751-4226-80e6-9795a0326ccf.agentbase-runtime.aiplatform.vngcloud.vn/](https://endpoint-c57756dd-5751-4226-80e6-9795a0326ccf.agentbase-runtime.aiplatform.vngcloud.vn/)
+- **🎫 ManageEngine ServiceDesk Plus (SVD):** [https://49.213.71.61:8089](https://49.213.71.61:8089)
+  - **Username:** `guest`
+  - **Password:** `Guest@123`
+
+---
+
 ## ✨ Features
 
 - **📧 Fully automated email pipeline** — polls Gmail via IMAP every 15s, classifies, processes, and replies via SMTP.
@@ -360,7 +369,7 @@ Please ensure no secrets or proprietary KB data are included in your PR.
 | Name | Role | Email |
 |---|---|---|
 | **Le Xuan Hoa** | 📋 Product Owner | `hoalx1@msb.com.vn` |
-| **Dang Thanh Tung** | 🔧 Main Developer · 🧪 Main Tester | `tungdtt16@msb.com.vn` |
+| **Dang Thanh Tung** | 🔧 Main Developer · 🧪 Main Tester | `tungdt16@msb.com.vn` |
 | Nguyen Quang Trung | 💻 Dev · 🏗️ Infrastructure · ✏️ Editor & Presenter | `trungnq20@msb.com.vn` |
 | Nguyen Truong Giang | 📊 Data Training · 🎯 Scenario Preparing | `giangnt26@msb.com.vn` | 
 | Nguyen Duc Tuan | 💡 Contributor (Idea) | `tuannd16@msb.com.vn` |
